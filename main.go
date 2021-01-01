@@ -6,6 +6,8 @@ import (
 	"strings"
 	"strconv"
 	"errors"
+	"math/rand"
+	"time"
 )
 
 type Character struct {
@@ -18,6 +20,8 @@ type Character struct {
 }
 
 func main() {
+
+	rand.Seed(time.Now().UnixNano())
 
 	if len(os.Args) < 2 {
 		PrintHelp()
@@ -49,7 +53,17 @@ func RollDie(input string) {
 		return
 	}
 
-	fmt.Println(numOfDice, typeOfDice)
+	results := []int{}
+	total := 0
+
+	for i := 0; i < numOfDice; i++ {
+		randomInt := rand.Intn(typeOfDice) + 1
+		results = append(results, randomInt)
+		total += randomInt
+	}
+
+	fmt.Println(results)
+	fmt.Println("Total:", total)
 }
 
 func ParseRollInput(input string) (int, int, error){
@@ -78,4 +92,5 @@ func PrintHelp() {
 
 		roll [ARGUMENT] parses an argument to roll dice. i.e. 5d20, 1d6, etc
 	`)
+	fmt.Println()
 }
