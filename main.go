@@ -23,26 +23,36 @@ func main() {
 
 	rand.Seed(time.Now().UnixNano())
 
-	if len(os.Args) < 2 {
-		PrintHelp()
-		return
-	}
 
 	// someday might have to do some sort of fancy parsing in here for
 	// command, input and flags
-	command := os.Args[1]
+	command, argument, err := GetCommandAndArgument()
 
+	if err != nil {
+		fmt.Println(err)
+		PrintHelp()
+		return;
+	}
+
+	// do some sort of input cleaning to make sure
+	// we have an argument
 	switch command {
 		case "roll":
-			RollDie(os.Args[2])
+			RollDie(argument)
 		default:
 			fmt.Println(command, "is not a valid command.")
 			PrintHelp()
 	}
 }
 
-func GetInput() {
+// For now, just two strings
+func GetCommandAndArgument() (string, string, error){
+	if len(os.Args) == 1 { // no command given, return error
+		return "", "", errors.New("No command given.")
+	}
 
+	// need to handle argument not being here
+	return os.Args[1], os.Args[2], nil
 }
 
 func RollDie(input string) {
