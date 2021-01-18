@@ -38,7 +38,19 @@ func main() {
 	// we have an argument
 	switch command {
 		case "roll":
-			RollDie(argument)
+			numOfDice, typeOfDice, err := ParseRollInput(argument)
+
+			if err != nil {
+				fmt.Println(err)
+			}
+
+			results, total := RollDie(numOfDice, typeOfDice)
+			fmt.Println(results)
+		fmt.Println("Total:", total)
+		case "create":
+			// multiple steps
+			// Pick Race
+			// Pick Class
 		default:
 			fmt.Println(command, "is not a valid command.")
 			PrintHelp()
@@ -55,13 +67,11 @@ func GetCommandAndArgument() (string, string, error){
 	return os.Args[1], os.Args[2], nil
 }
 
-func RollDie(input string) {
+func CreateCharacter() () {
 
-	numOfDice, typeOfDice, err := ParseRollInput(input)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+}
+
+func RollDie(numOfDice int, typeOfDice int) ([]int, int) {
 
 	results := []int{}
 	total := 0
@@ -72,8 +82,7 @@ func RollDie(input string) {
 		total += randomInt
 	}
 
-	fmt.Println(results)
-	fmt.Println("Total:", total)
+	return results, total
 }
 
 func ParseRollInput(input string) (int, int, error){
