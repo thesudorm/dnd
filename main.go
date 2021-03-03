@@ -23,6 +23,8 @@ func main() {
 
 	rand.Seed(time.Now().UnixNano())
 
+    // For now, load char sheet here by default. Can manage characters more effectively later
+    pc := LoadSheet()
 
 	// someday might have to do some sort of fancy parsing in here for
 	// command, input and flags
@@ -51,6 +53,12 @@ func main() {
 			// multiple steps
 			// Pick Race
 			// Pick Class
+		case "check":
+            AbilityCheck(pc, argument)
+		case "char":
+            // Print char sheet to 
+		case "help":
+            PrintHelp()
 		default:
 			fmt.Println(command, "is not a valid command.")
 			PrintHelp()
@@ -61,10 +69,12 @@ func main() {
 func GetCommandAndArgument() (string, string, error){
 	if len(os.Args) == 1 { // no command given, return error
 		return "", "", errors.New("No command given.")
-	}
+    } else if len(os.Args) == 2 {
+        return os.Args[1], "", nil
+    } else {
+	    return os.Args[1], os.Args[2], nil
+    }
 
-	// need to handle argument not being here
-	return os.Args[1], os.Args[2], nil
 }
 
 func CreateCharacter() () {
@@ -109,7 +119,65 @@ func PrintHelp() {
 	`Usage: dnd [COMMAND] [ARGUMENT]
 	 Create and manage DnD 5e characters. Roll dice.
 
-		roll [ARGUMENT] parses an argument to roll dice. i.e. 5d20, 1d6, etc
+		help    Print this help message
+		roll    [ARGUMENT] Parses an argument to roll dice. i.e. 5d20, 1d6, etc
 	`)
 	fmt.Println()
+}
+
+func LoadSheet() (Character) {
+    pc := Character {
+        str: 18,
+        dex: 15,
+        con: 20,
+        int: 13,
+        wis: 14,
+        chr: 10}
+
+    return pc
+}
+
+func AbilityCheck(pc Character, ability string) () {
+	results, total := RollDie(1, 20)
+
+    toPrint, err := strconv.Atoi(total)
+
+    switch ability {
+        case "str":
+        default:
+            fmt.Println("Not an ability check")
+    }
+}
+
+func Modifier(score int) int {
+    modifier := 0
+    switch {
+        case score == 1:
+            modifier = -5
+        case score <= 3:
+            modifier = -4
+        case score <= 5:
+            modifier = -3
+        case score <= 7:
+            modifier = -2
+        case score <= 9:
+            modifier = -1
+        case score <= 11:
+            modifier = 0
+        case score <= 13:
+            modifier = 1
+        case score <= 15:
+            modifier = 2
+        case score <= 17:
+            modifier = 3
+        case score <= 19:
+            modifier = 4
+        case score <= 21:
+            modifier = 5
+        case score <= 23:
+            modifier = 6
+        case score <= 25:
+            modifier = 7
+    }
+    return modifier
 }
